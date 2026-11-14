@@ -1,5 +1,6 @@
 import { Link, Route, Routes } from 'react-router'
 import AdminLoginPage from './features/admin-auth/AdminLoginPage'
+import QuizPlayPage from './features/quiz-play/QuizPlayPage'
 
 const Placeholder = ({ title }: { title: string }) => (
   <div className="grid min-h-svh place-items-center gap-4 text-center text-2xl">
@@ -19,6 +20,7 @@ export default function App() {
     <Routes>
       <Route path="/" element={<Placeholder title="Home" />} />
       <Route path="/admin/login" element={<AdminLoginPage />} />
+      <Route path="/play" element={<QuizPlayPage />} />
       <Route path="/admin" element={<Placeholder title="Admin dashboard" />} />
     </Routes>
   )
