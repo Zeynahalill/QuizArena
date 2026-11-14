@@ -1,7 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --color-arena-bg: #090b1f;
+  --font-sans: 'Plus Jakarta Sans', 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --color-arena-bg: #010c33;
   --color-arena-violet: #7c3aed;
   --color-arena-indigo: #5b5bf0;
   --color-arena-cyan: #38bdf8;
@@ -12,5 +14,5 @@ body {
   min-height: 100svh;
   background: var(--color-arena-bg);
   color: #f3f4f6;
-  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-sans);
 }
