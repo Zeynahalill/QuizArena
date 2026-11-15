@@ -1,0 +1,1820 @@
+/* Layout and celebration update. /admin (Dashboard) is intentionally excluded.
+   No global zoom, transforms, body rules, or shared podium changes. */
+
+/* A compact result stage, with all celebration effects behind its controls. */
+.ar-results {
+  min-height: 100svh;
+  padding: 18px clamp(16px, 3.5vw, 56px) 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: clip;
+}
+.ar-results > header {
+  width: 100%;
+  position: relative;
+  z-index: 2;
+  min-height: 42px;
+  gap: 12px;
+}
+.ar-results > header .ar-logo svg {
+  width: 40px;
+  height: 42px;
+}
+.ar-results > header .ar-logo b {
+  font-size: 26px;
+}
+.ar-results .ar-results-badge {
+  font-size: 14px;
+  padding: 8px 17px;
+}
+.ar-results-title {
+  margin: 12px 0 9px;
+  max-width: 100%;
+  z-index: 2;
+}
+.ar-results-title h1 {
+  font-size: clamp(28px, 3vw, 40px);
+  line-height: 1.15;
+  letter-spacing: -1px;
+}
+.ar-results-title > div {
+  gap: 18px;
+  margin-top: 7px;
+}
+.ar-results-title p {
+  font-size: clamp(16px, 1.7vw, 22px);
+  line-height: 1.3;
+}
+.ar-results-title > div > span {
+  width: 80px;
+}
+.ar-results-title > small {
+  font-size: 10px;
+  margin-top: 4px;
+  line-height: 1.3;
+}
+.ar-results-title > .ar-winner-announcement {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  margin: 9px auto 0;
+  width: fit-content;
+  max-width: 100%;
+  padding: 5px 18px;
+  border: 1px solid #ffce6666;
+  border-radius: 30px;
+  background: linear-gradient(100deg, #5d341a55, #8d5b1f44, #43234866);
+  box-shadow:
+    0 0 22px #ffbe2426,
+    inset 0 1px #ffecad33;
+  color: #ffe49c;
+  font-size: 15px;
+  line-height: 1.3;
+}
+.ar-winner-announcement strong {
+  overflow-wrap: anywhere;
+}
+.ar-winner-announcement > svg {
+  width: 16px;
+  height: 16px;
+  color: #ffd66b;
+  filter: drop-shadow(0 0 5px #ffbf64);
+}
+.ar-results-content {
+  max-width: 980px;
+  width: 100%;
+  z-index: 2;
+}
+.ar-results .ar-podium {
+  max-width: 920px;
+  padding-top: 110px;
+  gap: 12px;
+}
+.ar-results .ar-podium-place {
+  min-height: 142px;
+  padding: 33px 12px 20px;
+  border-radius: 24px 24px 4px 4px;
+  transform: none;
+}
+.ar-results .ar-place-1 {
+  min-height: 185px;
+}
+.ar-results .ar-place-3 {
+  min-height: 132px;
+}
+.ar-results .ar-place-1 > div {
+  padding-top: 18px;
+}
+.ar-results .ar-medal {
+  width: 65px;
+  height: 65px;
+  font-size: 43px;
+  border-width: 4px;
+  top: -34px;
+}
+.ar-results .ar-crown {
+  width: 86px;
+  height: 70px;
+  top: -104px;
+}
+.ar-results .ar-podium-place b {
+  font-size: clamp(18px, 2vw, 27px);
+  line-height: 1.2;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+.ar-results .ar-podium-place strong {
+  font-size: clamp(18px, 1.9vw, 25px);
+  gap: 7px;
+  margin-top: 11px;
+  flex-wrap: wrap;
+}
+.ar-results .ar-podium-place strong svg {
+  width: 23px;
+  height: 23px;
+}
+.ar-results .ar-podium-place strong small {
+  font-size: 16px;
+}
+.ar-results .ar-final-list {
+  margin: 16px 0 16px;
+  padding: 5px 23px;
+  max-height: 146px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #8052b9 #101130;
+  border-radius: 18px;
+}
+.ar-results .ar-final-list > div {
+  gap: 30px;
+  padding: 9px 19px;
+  min-height: 42px;
+  font-size: 18px;
+  line-height: 1.2;
+}
+.ar-results .ar-final-list > div > b {
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.ar-results .ar-final-list > div > strong {
+  font-size: 18px;
+  flex-shrink: 0;
+  gap: 7px;
+}
+.ar-results .ar-final-list small {
+  font-size: 14px;
+}
+.ar-results .ar-final-list svg {
+  width: 20px;
+  height: 20px;
+}
+.ar-results-actions {
+  position: relative;
+  z-index: 2;
+  margin-top: 0;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 100%;
+}
+.ar-results-content:has(> .ar-podium:last-child) + .ar-results-actions {
+  margin-top: 24px;
+}
+.ar-results .ar-home-button {
+  min-width: 250px;
+  min-height: 47px;
+  padding: 9px 25px;
+  font-size: 18px;
+  border-radius: 30px;
+}
+.ar-results .ar-home-button svg {
+  width: 23px;
+  height: 23px;
+}
+.ar-results-actions > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.ar-results-actions .ar-results-manage {
+  margin: 0;
+  font-size: 11px !important;
+}
+.ar-celebrate-again {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 0;
+  background: none;
+  color: #d2bbff !important;
+  font-size: 11px !important;
+  line-height: 1.4;
+  padding: 4px 9px;
+  border-radius: 12px;
+}
+.ar-celebrate-again:hover {
+  color: #ffe5a8 !important;
+  background: #6f45a72b;
+}
+.ar-celebrate-again > svg {
+  width: 15px;
+  height: 15px;
+}
+.ar-results--celebrating .ar-place-1 {
+  border-color: #ffe7a2;
+  background:
+    radial-gradient(ellipse at 50% 0%, #9352d844, transparent 75%),
+    linear-gradient(120deg, #5a23ba, #2c1269 55%, #6523d9);
+  box-shadow:
+    inset 0 3px 19px #f0bfff77,
+    0 0 16px #e2a03c77,
+    0 0 44px #a344f84d;
+}
+.ar-results--celebrating .ar-place-1::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: 0 0 28px #e7ab6466;
+  animation: ar-victory-glow 3.8s ease-in-out infinite;
+}
+.ar-results--celebrating .ar-place-1 .ar-crown {
+  filter: drop-shadow(0 0 9px #ffcf44) drop-shadow(0 0 24px #ffae32aa);
+  animation: ar-crown-hover 4s ease-in-out infinite;
+}
+.ar-results--celebrating .ar-place-1 .ar-medal {
+  box-shadow:
+    inset 0 0 0 3px #f6c254,
+    0 0 16px #ffd86799,
+    0 0 33px #e7a54966;
+}
+.ar-results--celebrating .ar-place-1 strong {
+  color: #ffe89c;
+  text-shadow: 0 0 16px #ffbf3c55;
+}
+.ar-results--celebrating .ar-podium-place {
+  animation: ar-podium-arrive 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.ar-results--celebrating .ar-place-2 {
+  animation-delay: 0.12s;
+}
+.ar-results--celebrating .ar-place-1 {
+  animation-delay: 0.3s;
+}
+.ar-results--celebrating .ar-place-3 {
+  animation-delay: 0.22s;
+}
+.ar-celebration {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  contain: paint;
+}
+.ar-winner-halo {
+  position: absolute;
+  top: 19%;
+  left: 50%;
+  width: min(640px, 90vw);
+  height: 430px;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    ellipse,
+    #ffcd6333,
+    #aa52ef1a 43%,
+    transparent 72%
+  );
+  animation: ar-victory-glow 5s ease-in-out infinite;
+}
+.ar-winner-beams {
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  width: min(930px, 130vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: repeating-conic-gradient(
+    from 12deg,
+    #ffd36500 0deg 14deg,
+    #ffe3a614 14deg 21deg,
+    transparent 21deg 36deg
+  );
+  mask-image: radial-gradient(
+    circle,
+    transparent 5%,
+    #000 20%,
+    transparent 69%
+  );
+  transform: translate(-50%, -50%);
+  animation: ar-beams-turn 65s linear infinite;
+}
+.ar-confetti-piece {
+  position: absolute;
+  left: var(--left);
+  top: -24px;
+  width: var(--width);
+  height: var(--height);
+  background: var(--color);
+  border-radius: 1px;
+  opacity: 0;
+  box-shadow: 0 0 5px color-mix(in srgb, var(--color) 35%, transparent);
+  animation: ar-confetti-fall var(--duration) var(--delay)
+    cubic-bezier(0.15, 0.45, 0.7, 1) 2 both;
+  will-change: transform, opacity;
+}
+.ar-confetti-piece:nth-of-type(4n) {
+  border-radius: 50%;
+  width: 5px;
+  height: 5px;
+}
+.ar-firework {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  left: 15%;
+  top: 29%;
+  color: #ffd86f;
+}
+.ar-firework-1 {
+  left: 84%;
+  top: 23%;
+  color: #af82ff;
+}
+.ar-firework-2 {
+  left: 25%;
+  top: 58%;
+  color: #65ddff;
+}
+.ar-firework-3 {
+  left: 78%;
+  top: 61%;
+  color: #ffcb7e;
+}
+.ar-firework > i {
+  position: absolute;
+  width: 4px;
+  height: 13px;
+  border-radius: 2px;
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
+  opacity: 0;
+  transform-origin: center;
+  animation: ar-firework-burst 2.7s var(--burst-delay) ease-out 2 both;
+}
+@keyframes ar-podium-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(22px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes ar-crown-hover {
+  50% {
+    transform: translateX(-50%) translateY(-6px) rotate(-4deg);
+  }
+}
+@keyframes ar-victory-glow {
+  0%,
+  100% {
+    opacity: 0.65;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes ar-beams-turn {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+@keyframes ar-confetti-fall {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -20px, 0) rotate(0);
+  }
+  5% {
+    opacity: 0.9;
+  }
+  80% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--drift), 105svh, 0) rotate(var(--spin));
+  }
+}
+@keyframes ar-firework-burst {
+  0% {
+    opacity: 0;
+    transform: rotate(var(--angle)) translateY(0) scale(0.5);
+  }
+  12% {
+    opacity: 0.9;
+  }
+  65% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(var(--angle)) translateY(-85px) scale(0.35);
+  }
+}
+
+/* Landing page: remove its old 900px minimum without affecting Dashboard. */
+.ar-home {
+  min-height: 100svh;
+  padding: 18px max(4%, calc((100vw - 1300px) / 2)) 15px;
+}
+.ar-home .ar-home-header {
+  min-height: 52px;
+  gap: 25px;
+}
+.ar-home-header .ar-logo svg {
+  width: 52px;
+  height: 52px;
+}
+.ar-home-header .ar-logo b {
+  font-size: 29px;
+}
+.ar-home .ar-hero {
+  margin: 15px 0 5px;
+  min-height: 0;
+  grid-template-columns: 1.1fr 1fr;
+}
+.ar-home .ar-hero h1 {
+  font-size: clamp(32px, 4.1vw, 59px);
+  white-space: normal;
+  letter-spacing: -1.6px;
+}
+.ar-home .ar-hero p {
+  font-size: clamp(15px, 1.5vw, 21px);
+  margin-top: 18px;
+}
+.ar-home .ar-hero > .ar-trophy-art {
+  height: clamp(240px, 34svh, 340px);
+  transform: scale(1.04);
+}
+.ar-home .ar-entry-grid {
+  gap: 22px;
+  margin-top: 6px;
+}
+.ar-home .ar-entry {
+  min-height: 0;
+  padding: 20px 20px 24px;
+  border-radius: 26px;
+}
+.ar-home .ar-entry-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 23px;
+  margin-bottom: 13px;
+}
+.ar-home .ar-entry-icon svg {
+  width: 50px;
+  height: 50px;
+}
+.ar-home .ar-entry h2 {
+  font-size: 27px;
+}
+.ar-home .ar-entry p {
+  font-size: 16px;
+  margin: 9px 0 18px;
+}
+.ar-home .ar-entry .ar-button {
+  font-size: 16px;
+  min-height: 46px;
+  padding: 10px 15px;
+}
+.ar-home .ar-home-footer {
+  margin-top: 23px;
+  gap: 12px;
+}
+.ar-home .ar-home-footer i {
+  width: 12px;
+  height: 12px;
+}
+.ar-home .ar-home-demo {
+  margin-top: 13px;
+}
+
+/* Game management/editor only. No selector here matches the Dashboard page. */
+.ar-admin:has(.ar-editor-grid) .ar-admin-content,
+.ar-admin:has(.ar-management-grid) .ar-admin-content {
+  min-width: 0;
+  padding: 0 22px 22px;
+}
+.ar-admin:has(.ar-editor-grid) .ar-topbar,
+.ar-admin:has(.ar-management-grid) .ar-topbar {
+  height: 68px;
+}
+.ar-admin:has(.ar-editor-grid) .ar-heading,
+.ar-admin:has(.ar-management-grid) .ar-heading {
+  gap: 17px;
+  margin: 3px 0 19px;
+}
+.ar-admin:has(.ar-editor-grid) .ar-heading-icon,
+.ar-admin:has(.ar-management-grid) .ar-heading-icon {
+  width: 65px;
+  height: 61px;
+}
+.ar-admin:has(.ar-editor-grid) .ar-heading h1,
+.ar-admin:has(.ar-management-grid) .ar-heading h1 {
+  font-size: 26px;
+}
+.ar-admin:has(.ar-editor-grid) .ar-heading p,
+.ar-admin:has(.ar-management-grid) .ar-heading p {
+  font-size: 13px;
+}
+.ar-admin:has(.ar-management-grid) .ar-stats {
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.ar-admin:has(.ar-management-grid) .ar-stats > article {
+  min-height: 88px;
+  padding: 14px 19px;
+  gap: 14px;
+}
+.ar-admin:has(.ar-management-grid) .ar-stats strong {
+  font-size: 25px;
+}
+.ar-admin:has(.ar-management-grid) .ar-stats span {
+  font-size: 12px;
+}
+.ar-admin:has(.ar-management-grid) .ar-stats > article > svg {
+  width: 31px;
+  height: 31px;
+}
+.ar-management-grid {
+  gap: 17px;
+}
+.ar-management-grid > .ar-card {
+  padding: 17px;
+  min-width: 0;
+}
+.ar-management-grid .ar-card h2 {
+  font-size: 16px;
+}
+.ar-management-grid .ar-player-list {
+  min-height: 240px;
+  max-height: 265px;
+  margin-top: 13px;
+}
+.ar-management-grid .ar-player-list > button {
+  min-height: 42px;
+  font-size: 12px;
+  gap: 8px;
+}
+.ar-management-grid .ar-player-list > button > b {
+  font-size: 10px;
+}
+.ar-management-grid .ar-control-grid {
+  gap: 10px;
+  margin-top: 14px;
+}
+.ar-management-grid .ar-control {
+  min-height: 70px;
+  font-size: 12px !important;
+  gap: 6px;
+}
+.ar-management-grid .ar-control > svg {
+  width: 26px;
+  height: 26px;
+}
+.ar-management-grid .ar-finish {
+  min-height: 40px;
+  margin-top: 10px;
+  font-size: 13px;
+}
+.ar-management-grid .ar-podium-compact {
+  padding-top: 60px;
+  margin: 10px 0 12px;
+}
+.ar-management-grid .ar-podium-compact .ar-podium-place {
+  min-height: 99px;
+}
+.ar-management-grid .ar-podium-compact .ar-place-1 {
+  min-height: 119px;
+}
+.ar-management-grid .ar-podium-compact .ar-podium-place b {
+  font-size: 12px;
+}
+.ar-management-grid .ar-podium-compact .ar-podium-place strong {
+  font-size: 18px;
+}
+.ar-management-grid .ar-main-connection {
+  min-height: 100px;
+  gap: 18px;
+}
+.ar-management-grid .ar-main-connection .ar-qr {
+  width: 70px;
+  height: 70px;
+}
+.ar-management-grid .ar-copy-row {
+  margin-top: 12px;
+}
+.ar-editor-grid {
+  gap: 14px;
+}
+.ar-editor-grid > .ar-card {
+  padding: 15px;
+  min-width: 0;
+}
+.ar-editor-grid .ar-question-preview {
+  min-height: 440px;
+  padding: 15px 14px 28px;
+}
+.ar-editor-grid .ar-question-preview h3 {
+  margin: 23px 3px 17px;
+  font-size: 24px;
+}
+.ar-editor-grid .ar-preview-gif {
+  height: 76px;
+  margin-bottom: 13px;
+}
+.ar-editor-grid .ar-preview-options > div {
+  min-height: 43px;
+  font-size: 12px;
+  padding: 7px 9px;
+}
+.ar-editor-grid .ar-preview-options {
+  gap: 8px;
+}
+.ar-editor-grid .ar-preview-star {
+  margin-top: 23px;
+}
+.ar-editor-grid .ar-field {
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+.ar-editor-grid .ar-field > textarea {
+  min-height: 52px;
+}
+.ar-editor-grid .ar-field > input {
+  padding: 8px 11px;
+}
+.ar-editor-grid .ar-upload > img {
+  height: 60px;
+}
+.ar-editor-grid .ar-feedback-grid .ar-upload > img {
+  height: 50px;
+}
+.ar-editor-grid .ar-question-row {
+  min-height: 53px;
+}
+.ar-editor-grid .ar-question-details {
+  overflow-wrap: anywhere;
+}
+.ar-editor-grid .ar-detail-heading {
+  gap: 8px;
+}
+.ar-editor-grid .ar-detail-heading h2 {
+  font-size: 15px;
+}
+.ar-editor-grid .ar-detail-heading label {
+  flex-shrink: 0;
+}
+@media (min-width: 1100px) and (max-width: 1250px) {
+  .ar-editor-grid {
+    grid-template-columns: 155px minmax(295px, 1.4fr) minmax(225px, 1fr);
+  }
+  .ar-editor-grid .ar-editor-preview {
+    grid-column: auto;
+  }
+  .ar-editor-grid .ar-feedback-grid .ar-upload {
+    flex-wrap: wrap;
+  }
+  .ar-editor-grid .ar-feedback-grid .ar-upload > img {
+    width: 100%;
+  }
+  .ar-editor-grid .ar-feedback-grid .ar-button {
+    width: 100%;
+  }
+  .ar-management-grid {
+    grid-template-columns: 0.95fr 1.2fr 1fr;
+  }
+  .ar-management-grid > .ar-live-ranking {
+    display: block;
+    grid-column: auto;
+  }
+  .ar-management-grid > .ar-health {
+    grid-column: auto;
+  }
+  .ar-management-grid .ar-main-connection {
+    grid-column: span 2;
+  }
+  .ar-management-grid .ar-card h2 {
+    font-size: 14px;
+    gap: 7px;
+  }
+  .ar-management-grid .ar-card h2 > svg {
+    width: 21px;
+    height: 21px;
+  }
+}
+
+/* Join, waiting, live player and large-screen presentation. */
+.ar-join-page {
+  padding: 20px;
+}
+.ar-join-panel {
+  max-width: 790px;
+  padding: 20px 30px 26px;
+}
+.ar-join-panel > header {
+  margin-bottom: 21px;
+}
+.ar-join-panel h1 {
+  font-size: 31px;
+  overflow-wrap: anywhere;
+}
+.ar-join-subtitle {
+  font-size: 17px;
+  margin: 8px 0 21px !important;
+}
+.ar-pin-layout {
+  max-width: 570px;
+  margin: 8px auto 20px;
+}
+.ar-join-panel .ar-hourglass {
+  height: 165px;
+  width: 260px;
+  margin-bottom: 22px;
+}
+.ar-join-panel .ar-hourglass svg {
+  width: 140px;
+  height: 163px;
+}
+.ar-join-panel .ar-hourglass-orbit {
+  width: 250px;
+  top: 73px;
+}
+.ar-join-panel .ar-lobby-bottom {
+  margin-top: 19px;
+}
+.ar-main-display {
+  padding: 19px 4%;
+}
+.ar-main-display > header .ar-logo svg {
+  width: 40px;
+  height: 42px;
+}
+.ar-main-display > header .ar-logo b {
+  font-size: 26px;
+}
+.ar-main-lobby {
+  max-width: 950px;
+  margin: 23px auto;
+  gap: 22px;
+}
+.ar-main-lobby h1 {
+  font-size: 36px;
+}
+.ar-main-lobby .ar-hourglass {
+  height: 160px;
+  margin-bottom: 20px;
+}
+.ar-main-lobby .ar-hourglass svg {
+  height: 158px;
+}
+.ar-main-lobby .ar-hourglass-orbit {
+  width: 240px;
+}
+.ar-main-pin {
+  font-size: 65px;
+  margin: 10px auto;
+}
+.ar-main-qr {
+  padding: 25px;
+  gap: 19px;
+}
+.ar-main-qr .ar-qr {
+  width: 185px;
+  height: 185px;
+}
+.ar-joined-names {
+  max-height: 135px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  padding: 5px;
+  overscroll-behavior: contain;
+}
+.ar-display-question {
+  max-width: 950px;
+  margin: 19px auto 25px;
+}
+.ar-display-meta {
+  font-size: 16px;
+}
+.ar-display-meta > span {
+  padding: 8px 18px;
+}
+.ar-display-question h1 {
+  font-size: clamp(26px, 3vw, 40px);
+  margin: 19px auto 17px;
+  overflow-wrap: anywhere;
+}
+.ar-display-question > img {
+  max-width: 530px;
+  max-height: 145px;
+  margin-bottom: 19px;
+}
+.ar-display-options {
+  gap: 13px;
+}
+.ar-display-options > div {
+  font-size: 18px;
+  min-height: 72px;
+  padding: 13px;
+  gap: 16px;
+  min-width: 0;
+}
+.ar-display-options > div > span {
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.ar-display-options b {
+  width: 40px;
+  height: 40px;
+  font-size: 25px;
+}
+.ar-display-question > p {
+  margin-top: 16px;
+}
+.ar-main-display > footer {
+  padding-top: 15px;
+}
+.quiz-play {
+  padding: 16px;
+}
+.quiz-play .qp-stage {
+  max-width: 700px;
+  min-width: 0;
+}
+.quiz-play .qp-header {
+  padding: 16px 27px;
+  min-height: 70px;
+}
+.quiz-play .qp-brand {
+  font-size: 25px;
+  gap: 12px;
+}
+.quiz-play .qp-brand > svg {
+  width: 42px;
+  height: 42px;
+}
+.quiz-play .qp-question-body {
+  padding: 16px 0 35px;
+}
+.quiz-play .qp-progress {
+  min-height: 42px;
+  min-width: 185px;
+  font-size: 18px;
+}
+.quiz-play .qp-question-body h1 {
+  font-size: 49px;
+  margin: 20px auto 24px;
+  overflow-wrap: anywhere;
+}
+.quiz-play .qp-question-body h1.qp-long-title {
+  font-size: 31px;
+  min-height: 55px;
+}
+.quiz-play .qp-question-body > .qp-media {
+  max-height: 160px;
+  margin-bottom: 17px;
+}
+.quiz-play .qp-option {
+  min-height: 63px;
+  font-size: 18px !important;
+  gap: 25px;
+  padding: 8px 15px;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.quiz-play .qp-letter {
+  width: 43px;
+  height: 43px;
+  font-size: 27px;
+}
+.quiz-play .qp-options {
+  gap: 10px;
+}
+.quiz-play .qp-result-body {
+  grid-template-columns: 35% minmax(0, 1fr);
+  padding-right: 13%;
+  padding-left: 4%;
+}
+.quiz-play .qp-answer {
+  overflow-wrap: anywhere;
+}
+.quiz-play .qp-orbit {
+  width: 220px;
+}
+.ar-login .ar-login-layout {
+  max-width: 1250px;
+  padding-block: 32px;
+  gap: 30px;
+}
+.ar-login .ar-login-card {
+  max-width: 410px;
+}
+.ar-login .ar-login-brand h1 {
+  font-size: 49px;
+  margin-top: 19px;
+}
+.ar-login .ar-login-brand > svg {
+  width: 95px;
+  height: 95px;
+}
+
+/* Fit common laptop/125%-zoom viewports without hiding page content. */
+@media (min-width: 700px) and (max-height: 800px) {
+  .ar-results {
+    padding: 12px 3% 12px;
+  }
+  .ar-results > header {
+    min-height: 35px;
+  }
+  .ar-results > header .ar-logo svg {
+    width: 33px;
+    height: 35px;
+  }
+  .ar-results > header .ar-logo b {
+    font-size: 23px;
+  }
+  .ar-results .ar-results-badge {
+    font-size: 12px;
+    padding: 6px 13px;
+  }
+  .ar-results-title {
+    margin: 5px 0 4px;
+  }
+  .ar-results-title h1 {
+    font-size: 32px;
+  }
+  .ar-results-title p {
+    font-size: 17px;
+  }
+  .ar-results-title > div {
+    margin-top: 5px;
+  }
+  .ar-results-title > .ar-winner-announcement {
+    font-size: 13px;
+    padding: 4px 14px;
+    margin-top: 6px;
+  }
+  .ar-results-title > small {
+    font-size: 9px;
+  }
+  .ar-results-content {
+    max-width: 870px;
+  }
+  .ar-results .ar-podium {
+    padding-top: 94px;
+    max-width: 820px;
+  }
+  .ar-results .ar-podium-place {
+    min-height: 120px;
+    padding-top: 29px;
+    padding-bottom: 15px;
+  }
+  .ar-results .ar-place-1 {
+    min-height: 155px;
+  }
+  .ar-results .ar-place-3 {
+    min-height: 110px;
+  }
+  .ar-results .ar-podium-place b {
+    font-size: 22px;
+  }
+  .ar-results .ar-podium-place strong {
+    font-size: 21px;
+    margin-top: 8px;
+  }
+  .ar-results .ar-medal {
+    width: 58px;
+    height: 58px;
+    font-size: 39px;
+    top: -31px;
+  }
+  .ar-results .ar-crown {
+    width: 73px;
+    height: 59px;
+    top: -88px;
+  }
+  .ar-results .ar-place-1 > div {
+    padding-top: 13px;
+  }
+  .ar-results .ar-final-list {
+    max-height: 119px;
+    padding: 3px 20px;
+    margin: 12px 0;
+  }
+  .ar-results .ar-final-list > div {
+    font-size: 16px;
+    min-height: 36px;
+    padding: 8px 15px;
+  }
+  .ar-results .ar-final-list > div > strong {
+    font-size: 16px;
+  }
+  .ar-results .ar-final-list svg {
+    width: 17px;
+    height: 17px;
+  }
+  .ar-results .ar-home-button {
+    min-height: 42px;
+    min-width: 225px;
+    font-size: 16px;
+    padding: 8px 22px;
+  }
+  .ar-results-actions {
+    gap: 5px;
+  }
+  .ar-home .ar-hero > .ar-trophy-art {
+    height: 250px;
+  }
+  .ar-home .ar-hero h1 {
+    font-size: clamp(32px, 3.8vw, 52px);
+  }
+  .ar-home .ar-hero p {
+    font-size: 17px;
+    margin-top: 13px;
+  }
+  .ar-home .ar-short-line {
+    margin-top: 16px;
+    height: 4px;
+  }
+  .ar-home .ar-entry {
+    padding: 17px 18px 19px;
+  }
+  .ar-home .ar-entry-icon {
+    width: 67px;
+    height: 67px;
+    margin-bottom: 10px;
+  }
+  .ar-home .ar-entry-icon svg {
+    width: 43px;
+    height: 43px;
+  }
+  .ar-home .ar-entry h2 {
+    font-size: 25px;
+  }
+  .ar-home .ar-entry p {
+    font-size: 14px;
+    margin: 8px 0 14px;
+  }
+  .ar-home .ar-entry .ar-button {
+    min-height: 42px;
+    font-size: 14px;
+  }
+  .ar-home .ar-home-footer {
+    margin-top: 17px;
+  }
+  .ar-home .ar-home-demo {
+    margin-top: 10px;
+  }
+  .ar-home .ar-home-demo .ar-demo {
+    padding: 6px 12px;
+    font-size: 10px;
+  }
+  .ar-admin:has(.ar-management-grid) .ar-topbar,
+  .ar-admin:has(.ar-editor-grid) .ar-topbar {
+    height: 57px;
+  }
+  .ar-admin:has(.ar-management-grid) .ar-heading,
+  .ar-admin:has(.ar-editor-grid) .ar-heading {
+    margin-bottom: 14px;
+  }
+  .ar-management-grid .ar-player-list {
+    min-height: 215px;
+    max-height: 235px;
+  }
+  .ar-management-grid .ar-control {
+    min-height: 62px;
+    font-size: 11px !important;
+  }
+  .ar-management-grid .ar-podium-compact {
+    padding-top: 53px;
+  }
+  .ar-management-grid .ar-podium-compact .ar-podium-place {
+    min-height: 91px;
+  }
+  .ar-management-grid .ar-podium-compact .ar-place-1 {
+    min-height: 108px;
+  }
+  .ar-editor-grid .ar-feedback-grid .ar-upload {
+    flex-wrap: nowrap;
+  }
+  .ar-editor-grid .ar-feedback-grid .ar-upload > img {
+    width: 45%;
+    height: 45px;
+  }
+  .ar-editor-grid .ar-feedback-grid .ar-button {
+    width: auto;
+    font-size: 9px;
+  }
+  .ar-editor-grid .ar-feedback-grid {
+    gap: 8px;
+  }
+  .ar-editor-grid .ar-field {
+    margin-bottom: 8px;
+  }
+  .ar-editor-grid .ar-field > textarea {
+    min-height: 45px;
+    padding: 8px 10px;
+  }
+  .ar-editor-grid .ar-upload > img {
+    height: 49px;
+  }
+  .ar-editor-grid .ar-question-preview {
+    min-height: 420px;
+  }
+  .quiz-play .qp-stage {
+    max-width: 640px;
+  }
+  .quiz-play .qp-header {
+    min-height: 59px;
+    padding: 11px 25px;
+  }
+  .quiz-play .qp-brand {
+    font-size: 23px;
+  }
+  .quiz-play .qp-brand > svg {
+    width: 37px;
+    height: 37px;
+  }
+  .quiz-play .qp-timer {
+    font-size: 19px;
+    padding: 7px 13px;
+  }
+  .quiz-play .qp-question-body {
+    padding: 13px 0 25px;
+  }
+  .quiz-play .qp-progress {
+    min-height: 36px;
+    font-size: 16px;
+    padding: 6px 19px;
+  }
+  .quiz-play .qp-question-body h1 {
+    font-size: 41px;
+    margin: 17px auto 20px;
+  }
+  .quiz-play .qp-question-body h1.qp-long-title {
+    font-size: 28px;
+    min-height: 48px;
+  }
+  .quiz-play .qp-question-body > .qp-media {
+    max-height: 132px;
+    margin-bottom: 15px;
+  }
+  .quiz-play .qp-option {
+    min-height: 54px;
+    font-size: 16px !important;
+  }
+  .quiz-play .qp-letter {
+    width: 36px;
+    height: 36px;
+    font-size: 23px;
+  }
+  .quiz-play .qp-options {
+    gap: 9px;
+  }
+  .ar-main-display {
+    padding-block: 14px;
+  }
+  .ar-display-question h1 {
+    font-size: 33px;
+    margin: 15px auto;
+  }
+  .ar-display-question > img {
+    max-height: 125px;
+    margin-bottom: 15px;
+  }
+  .ar-display-options > div {
+    min-height: 63px;
+    padding: 10px;
+    font-size: 16px;
+  }
+  .ar-display-options b {
+    width: 35px;
+    height: 35px;
+    font-size: 22px;
+  }
+  .ar-main-lobby {
+    margin: 17px auto;
+    gap: 18px;
+  }
+  .ar-main-lobby .ar-hourglass {
+    height: 135px;
+    margin-bottom: 15px;
+  }
+  .ar-main-lobby .ar-hourglass svg {
+    height: 137px;
+  }
+  .ar-main-lobby .ar-hourglass-orbit {
+    width: 215px;
+    top: 65px;
+  }
+  .ar-main-lobby h1 {
+    font-size: 32px;
+  }
+  .ar-main-pin {
+    font-size: 58px;
+  }
+  .ar-joined-names {
+    max-height: 100px;
+  }
+}
+@media (min-width: 1100px) and (max-height: 800px) {
+  .ar-admin:has(.ar-editor-grid) .ar-detail-heading {
+    margin-bottom: 10px;
+  }
+  .ar-admin:has(.ar-editor-grid) .ar-heading-icon,
+  .ar-admin:has(.ar-management-grid) .ar-heading-icon {
+    width: 57px;
+    height: 54px;
+  }
+  .ar-admin:has(.ar-management-grid) .ar-stats > article {
+    min-height: 78px;
+    padding: 11px 16px;
+  }
+  .ar-admin:has(.ar-management-grid) .ar-stats {
+    margin-bottom: 14px;
+  }
+  .ar-management-grid > .ar-card {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 699px) {
+  .ar-results {
+    padding: 16px 12px 20px;
+    overflow: clip;
+  }
+  .ar-results > header .ar-logo {
+    gap: 4px;
+  }
+  .ar-results > header .ar-logo svg {
+    width: 30px;
+    height: 32px;
+  }
+  .ar-results > header .ar-logo b {
+    font-size: 20px;
+  }
+  .ar-results .ar-results-badge {
+    font-size: 11px;
+    padding: 7px 10px;
+    gap: 6px;
+  }
+  .ar-results-title {
+    margin: 23px 0 12px;
+  }
+  .ar-results-title h1 {
+    font-size: 27px;
+    letter-spacing: -0.7px;
+  }
+  .ar-results-title p {
+    font-size: 15px;
+  }
+  .ar-results-title > div {
+    gap: 9px;
+  }
+  .ar-results-title > div > span {
+    width: 24px;
+  }
+  .ar-results-title > .ar-winner-announcement {
+    font-size: 12px;
+    padding: 5px 12px;
+    margin-top: 10px;
+  }
+  .ar-results .ar-podium {
+    gap: 7px;
+    padding-top: 94px;
+  }
+  .ar-results .ar-podium-place {
+    min-height: 118px;
+    padding: 30px 5px 16px;
+    border-radius: 17px 17px 3px 3px;
+  }
+  .ar-results .ar-place-1 {
+    min-height: 151px;
+  }
+  .ar-results .ar-place-3 {
+    min-height: 108px;
+  }
+  .ar-results .ar-place-1 > div {
+    padding-top: 14px;
+  }
+  .ar-results .ar-medal {
+    width: 48px;
+    height: 48px;
+    top: -27px;
+    font-size: 32px;
+    border-width: 3px;
+  }
+  .ar-results .ar-crown {
+    width: 67px;
+    height: 54px;
+    top: -81px;
+  }
+  .ar-results .ar-podium-place b {
+    font-size: 16px;
+    line-height: 1.25;
+  }
+  .ar-results .ar-podium-place strong {
+    font-size: 17px;
+    gap: 4px;
+    margin-top: 10px;
+  }
+  .ar-results .ar-podium-place strong small {
+    font-size: 11px;
+  }
+  .ar-results .ar-podium-place strong svg {
+    width: 15px;
+    height: 15px;
+  }
+  .ar-results .ar-final-list {
+    padding: 4px 12px;
+    margin: 16px 0;
+    max-height: 143px;
+    border-radius: 16px;
+  }
+  .ar-results .ar-final-list > div {
+    gap: 13px;
+    font-size: 15px;
+    padding: 10px 3px;
+    min-height: 40px;
+  }
+  .ar-results .ar-final-list > div > strong {
+    font-size: 15px;
+    gap: 5px;
+  }
+  .ar-results .ar-final-list small {
+    font-size: 11px;
+  }
+  .ar-results .ar-final-list svg {
+    width: 16px;
+    height: 16px;
+  }
+  .ar-results .ar-home-button {
+    min-width: 230px;
+    font-size: 16px;
+    min-height: 45px;
+  }
+  .ar-results-actions > div {
+    gap: 7px;
+    flex-direction: column;
+  }
+  .ar-results-actions .ar-results-manage {
+    font-size: 10px !important;
+  }
+  .ar-firework-2,
+  .ar-firework-3 {
+    display: none;
+  }
+  .ar-confetti-piece:nth-of-type(2n) {
+    display: none;
+  }
+  .ar-winner-beams {
+    width: 600px;
+    top: 35%;
+  }
+  .ar-home {
+    padding: 16px 5%;
+  }
+  .ar-home .ar-home-header {
+    gap: 14px;
+  }
+  .ar-home-header .ar-logo svg {
+    width: 40px;
+    height: 42px;
+  }
+  .ar-home-header .ar-logo b {
+    font-size: 25px;
+  }
+  .ar-home .ar-platform {
+    font-size: 10px;
+    padding: 8px;
+    gap: 5px;
+  }
+  .ar-home .ar-hero {
+    display: flex;
+    flex-direction: column;
+    margin: 24px 0 0;
+  }
+  .ar-home .ar-hero h1 {
+    font-size: 36px;
+  }
+  .ar-home .ar-hero p {
+    font-size: 16px;
+    margin-top: 14px;
+  }
+  .ar-home .ar-short-line {
+    margin-top: 15px;
+  }
+  .ar-home .ar-hero > .ar-trophy-art {
+    height: 230px;
+    transform: none;
+    margin: -3px 0 0;
+  }
+  .ar-home .ar-entry-grid {
+    gap: 15px;
+    grid-template-columns: 1fr;
+  }
+  .ar-home .ar-entry {
+    grid-template-columns: 70px 1fr;
+    padding: 18px;
+    gap: 5px 14px;
+    text-align: left;
+  }
+  .ar-home .ar-entry-icon {
+    width: 65px;
+    height: 65px;
+    margin: 0;
+    grid-row: span 2;
+  }
+  .ar-home .ar-entry-icon svg {
+    width: 41px;
+    height: 41px;
+  }
+  .ar-home .ar-entry h2 {
+    font-size: 24px;
+  }
+  .ar-home .ar-entry p {
+    font-size: 13px;
+    margin: 3px 0 8px;
+  }
+  .ar-home .ar-entry .ar-button {
+    width: 100%;
+    font-size: 14px;
+    min-height: 42px;
+    margin-top: 6px;
+  }
+  .ar-admin:has(.ar-editor-grid) .ar-admin-content,
+  .ar-admin:has(.ar-management-grid) .ar-admin-content {
+    padding: 0 13px 22px;
+  }
+  .ar-admin:has(.ar-editor-grid) .ar-heading,
+  .ar-admin:has(.ar-management-grid) .ar-heading {
+    gap: 11px;
+  }
+  .ar-admin:has(.ar-editor-grid) .ar-heading h1,
+  .ar-admin:has(.ar-management-grid) .ar-heading h1 {
+    font-size: 23px;
+  }
+  .ar-admin:has(.ar-editor-grid) .ar-heading p,
+  .ar-admin:has(.ar-management-grid) .ar-heading p {
+    font-size: 11px;
+  }
+  .ar-admin:has(.ar-editor-grid) .ar-heading-icon,
+  .ar-admin:has(.ar-management-grid) .ar-heading-icon {
+    width: 51px;
+    height: 51px;
+  }
+  .ar-admin:has(.ar-management-grid) .ar-stats {
+    gap: 10px;
+  }
+  .ar-admin:has(.ar-management-grid) .ar-stats > article {
+    padding: 12px;
+    gap: 9px;
+    min-height: 81px;
+  }
+  .ar-admin:has(.ar-management-grid) .ar-stats strong {
+    font-size: 22px;
+  }
+  .ar-admin:has(.ar-management-grid) .ar-stats span {
+    font-size: 10px;
+  }
+  .ar-management-grid .ar-player-list {
+    min-height: 100px;
+    max-height: 230px;
+  }
+  .ar-management-grid .ar-control {
+    min-height: 73px;
+  }
+  .ar-management-grid .ar-main-connection {
+    gap: 14px;
+  }
+  .ar-editor-grid .ar-feedback-grid .ar-upload {
+    flex-wrap: wrap;
+  }
+  .ar-editor-grid .ar-feedback-grid .ar-upload > img {
+    width: 100%;
+    height: 55px;
+  }
+  .ar-editor-grid .ar-feedback-grid .ar-button {
+    width: 100%;
+  }
+  .ar-editor-grid .ar-question-preview {
+    min-height: 440px;
+  }
+  .ar-editor-grid .ar-detail-heading h2 {
+    font-size: 15px;
+  }
+  .ar-join-page {
+    padding: 12px;
+  }
+  .ar-join-panel {
+    padding: 17px 17px 24px;
+  }
+  .ar-join-panel h1 {
+    font-size: 26px;
+  }
+  .ar-join-subtitle {
+    font-size: 15px;
+  }
+  .ar-pin-layout {
+    max-width: 310px;
+  }
+  .ar-join-panel > header .ar-demo {
+    max-width: 135px;
+    white-space: normal;
+    text-align: right;
+  }
+  .ar-join-panel .ar-lobby-stats {
+    padding: 12px;
+    gap: 12px;
+  }
+  .ar-join-panel .ar-lobby-stats > div {
+    gap: 8px;
+  }
+  .ar-join-panel .ar-lobby-stats strong {
+    font-size: 16px;
+  }
+  .ar-join-panel .ar-lobby-stats > div > svg {
+    width: 25px;
+    height: 25px;
+  }
+  .ar-join-panel .ar-hourglass {
+    height: 155px;
+    width: 230px;
+  }
+  .ar-join-panel .ar-hourglass svg {
+    width: 133px;
+    height: 152px;
+  }
+  .ar-join-panel .ar-hourglass-orbit {
+    width: 220px;
+    top: 65px;
+  }
+  .ar-join-panel .ar-name-form .ar-button {
+    font-size: 16px;
+    min-width: 210px;
+  }
+  .ar-main-display {
+    padding: 16px 13px;
+  }
+  .ar-main-display > header .ar-logo svg {
+    width: 32px;
+    height: 35px;
+  }
+  .ar-main-display > header .ar-logo b {
+    font-size: 22px;
+  }
+  .ar-main-lobby h1 {
+    font-size: 29px;
+  }
+  .ar-main-pin {
+    font-size: 56px;
+  }
+  .ar-display-question h1 {
+    font-size: 27px;
+  }
+  .ar-display-meta {
+    font-size: 12px;
+  }
+  .ar-display-meta > span {
+    padding: 8px 12px;
+  }
+  .ar-display-options > div {
+    font-size: 16px;
+    min-height: 63px;
+  }
+  .ar-display-options b {
+    width: 35px;
+    height: 35px;
+    font-size: 23px;
+  }
+  .ar-main-display > footer span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    text-align: right;
+  }
+  .quiz-play {
+    padding: 11px;
+  }
+  .quiz-play .qp-header {
+    min-height: 62px;
+    padding: 13px 17px;
+  }
+  .quiz-play .qp-brand {
+    font-size: 21px;
+    gap: 7px;
+  }
+  .quiz-play .qp-brand > svg {
+    width: 34px;
+    height: 34px;
+  }
+  .quiz-play .qp-timer {
+    font-size: 18px;
+    padding: 7px 10px;
+    gap: 6px;
+  }
+  .quiz-play .qp-question-body {
+    padding: 15px 0 30px;
+  }
+  .quiz-play .qp-progress {
+    font-size: 15px;
+    min-height: 36px;
+    min-width: 150px;
+  }
+  .quiz-play .qp-question-body h1 {
+    font-size: 36px;
+    margin: 22px auto;
+  }
+  .quiz-play .qp-question-body h1.qp-long-title {
+    font-size: 26px;
+    min-height: 0;
+  }
+  .quiz-play .qp-question-body > .qp-media {
+    width: 85%;
+    margin-bottom: 16px;
+  }
+  .quiz-play .qp-options {
+    width: 85%;
+    gap: 10px;
+  }
+  .quiz-play .qp-option {
+    font-size: 15px !important;
+    gap: 13px;
+    padding: 9px 11px;
+    min-height: 59px;
+  }
+  .quiz-play .qp-letter {
+    width: 36px;
+    height: 36px;
+    font-size: 23px;
+  }
+  .quiz-play .qp-result-body {
+    grid-template-columns: 1fr;
+    padding: 0 22px 27px;
+  }
+  .quiz-play .qp-orbit {
+    height: 185px;
+    width: 220px;
+    justify-self: center;
+    transform: none;
+  }
+  .quiz-play .qp-result-detail {
+    width: 100%;
+    max-width: 355px;
+    justify-self: center;
+  }
+  .quiz-play .qp-status-orb {
+    width: 115px;
+    height: 115px;
+  }
+  .quiz-play .qp-verdict {
+    font-size: 26px;
+    min-height: 49px;
+    min-width: 210px;
+    padding: 9px 16px;
+  }
+  .quiz-play .qp-result-detail .qp-media {
+    margin: 13px 0 16px;
+  }
+  .quiz-play .qp-continue {
+    font-size: 16px !important;
+    min-height: 43px;
+  }
+  .ar-login .ar-login-layout {
+    gap: 39px;
+    padding: 24px 18px;
+  }
+  .ar-login .ar-login-brand > svg {
+    width: 66px;
+    height: 66px;
+  }
+  .ar-login .ar-login-brand h1 {
+    font-size: 36px;
+    margin-top: 12px;
+  }
+  .ar-login .ar-login-brand p {
+    font-size: 14px;
+    margin-top: 9px;
+  }
+  .ar-login .ar-login-brand p:first-of-type {
+    font-size: 19px;
+  }
+  .ar-login .ar-login-card {
+    margin-top: 16px;
+    padding: 58px 21px 16px;
+    max-width: 380px;
+  }
+  .ar-login .ar-login-card > div:first-child {
+    width: 75px;
+    height: 75px;
+  }
+  .ar-login .ar-login-card > div:first-child svg {
+    width: 49px;
+    height: 49px;
+  }
+  .ar-login .ar-login-card h2 {
+    font-size: 26px;
+  }
+  .ar-login .ar-login-card form {
+    margin-top: 21px;
+  }
+  .ar-login .ar-login-card form > div:first-child {
+    height: 54px;
+    gap: 17px;
+    padding-inline: 17px;
+  }
+}
+@media (max-width: 370px) {
+  .ar-home-header .ar-logo b {
+    font-size: 22px;
+  }
+  .ar-home .ar-home-header {
+    gap: 10px;
+  }
+  .ar-home .ar-hero h1 {
+    font-size: 32px;
+  }
+  .ar-results .ar-podium-place b {
+    font-size: 14px;
+  }
+  .ar-results .ar-podium-place strong {
+    font-size: 15px;
+    gap: 3px;
+  }
+  .ar-results-title h1 {
+    font-size: 24px;
+  }
+  .ar-results .ar-final-list > div {
+    gap: 10px;
+    font-size: 14px;
+  }
+  .ar-results .ar-final-list > div > strong {
+    font-size: 14px;
+  }
+  .ar-join-panel > header .ar-demo {
+    font-size: 7px;
+    padding: 5px;
+  }
+  .ar-join-panel .ar-lobby-stats {
+    gap: 8px;
+    padding: 10px;
+  }
+  .ar-join-panel .ar-lobby-stats > div {
+    gap: 6px;
+  }
+  .ar-join-panel .ar-lobby-stats strong {
+    font-size: 14px;
+  }
+  .quiz-play .qp-brand {
+    font-size: 19px;
+  }
+  .quiz-play .qp-header {
+    padding-inline: 13px;
+  }
+  .quiz-play .qp-option {
+    font-size: 14px !important;
+    gap: 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ar-results .ar-celebration *,
+  .ar-results--celebrating .ar-podium-place,
+  .ar-results--celebrating .ar-place-1::before,
+  .ar-results--celebrating .ar-place-1 .ar-crown {
+    animation: none !important;
+    transition: none !important;
+  }
+  .ar-confetti-piece,
+  .ar-firework {
+    display: none;
+  }
+  .ar-celebrate-again {
+    display: none;
+  }
+  .ar-results--celebrating .ar-podium-place {
+    opacity: 1;
+    transform: none;
+  }
+}

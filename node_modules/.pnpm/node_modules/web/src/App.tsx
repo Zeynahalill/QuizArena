@@ -7,6 +7,7 @@ import QuizEditor from "./features/arena/QuizEditor";
 import { EnterName, JoinGame, Lobby } from "./features/arena/JoinPages";
 import { LivePlayer, MainScreen, Results } from "./features/arena/LiveScreens";
 import { Logo, Surface } from "./features/arena/ArenaShared";
+import "./features/arena/screenPolish.css";
 export default function App() {
   return (
     <Routes>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import type { CSSProperties } from "react";
 import { Link, useNavigate } from "react-router";
 import {
   Check,
@@ -7,6 +8,7 @@ import {
   Pause,
   Play,
   Star,
+  Sparkles,
   Timer,
   Trophy,
   Users,
@@ -117,13 +119,68 @@ const SAMPLE_PLAYERS: Player[] = [
   answers: {},
   demo: true,
 }));
+function Celebration({ replay }: { replay: number }) {
+  return (
+    <div key={replay} className="ar-celebration" aria-hidden="true">
+      <div className="ar-winner-halo" />
+      <div className="ar-winner-beams" />
+      {Array.from({ length: 72 }, (_, i) => (
+        <i
+          key={i}
+          className="ar-confetti-piece"
+          style={
+            {
+              "--left": `${2 + ((i * 37) % 96)}%`,
+              "--delay": `${(i % 18) * 0.13}s`,
+              "--duration": `${4.5 + (i % 7) * 0.35}s`,
+              "--drift": `${((i * 23) % 160) - 80}px`,
+              "--spin": `${(i % 2 ? 1 : -1) * (360 + (i % 4) * 180)}deg`,
+              "--color": [
+                "#ffd665",
+                "#af63ff",
+                "#42d8ff",
+                "#ff8ec8",
+                "#fff0b8",
+              ][i % 5],
+              "--width": `${5 + (i % 5)}px`,
+              "--height": `${8 + (i % 9)}px`,
+            } as CSSProperties
+          }
+        />
+      ))}
+      {[0, 1, 2, 3].map((burst) => (
+        <div className={`ar-firework ar-firework-${burst}`} key={burst}>
+          {Array.from({ length: 12 }, (_, i) => (
+            <i
+              key={i}
+              style={
+                {
+                  "--angle": `${i * 30}deg`,
+                  "--burst-delay": `${0.2 + burst * 0.6}s`,
+                } as CSSProperties
+              }
+            />
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+}
 export function Results() {
   const s = useArena();
+  const [replay, setReplay] = useState(0);
   const sample = !s.players.length;
   const players = ranking(sample ? SAMPLE_PLAYERS : s.players);
   const finished = s.status === "finished" || sample;
+  const winners = players.filter((p) => p.score === players[0]?.score);
+  const winnerText =
+    winners.length === 1
+      ? `${winners[0].name} wins!`
+      : `${winners.length} joint winners!`;
   return (
-    <Surface className="ar-results">
+    <Surface
+      className={`ar-results ${finished ? "ar-results--celebrating" : ""}`}
+    >
       <header>
         <Logo />
         <span className="ar-results-badge">
@@ -142,45 +199,60 @@ export function Results() {
           </p>
           <span />
         </div>
+        {finished && (
+          <div className="ar-winner-announcement" role="status">
+            <Sparkles />
+            <strong>{winnerText}</strong>
+            <Sparkles />
+          </div>
+        )}
         {sample && <small>Design preview · sample results</small>}
       </div>
       <div className="ar-results-content">
         <Podium players={players} />
-        <div className="ar-final-list">
-          {players.slice(3).map((p, i) => (
-            <div key={p.id}>
-              <span>{i + 4}</span>
-              <b>{p.name}</b>
-              <strong>
-                <Star fill="currentColor" />
-                {p.score.toLocaleString()} <small>pts</small>
-              </strong>
-            </div>
-          ))}
-        </div>
+        {players.length > 3 && (
+          <div
+            className="ar-final-list"
+            tabIndex={0}
+            role="region"
+            aria-label="Remaining rankings"
+          >
+            {players.slice(3).map((p, i) => (
+              <div key={p.id}>
+                <span>{i + 4}</span>
+                <b>{p.name}</b>
+                <strong>
+                  <Star fill="currentColor" />
+                  {p.score.toLocaleString()} <small>pts</small>
+                </strong>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
-      <Link to="/" className="ar-button ar-home-button">
-        <Home fill="currentColor" />
-        Back to Home
-      </Link>
-      {!sample && (
-        <Link to="/admin/game" className="ar-text-link ar-results-manage">
-          Back to Game Management
+      <footer className="ar-results-actions">
+        <Link to="/" className="ar-button ar-home-button">
+          <Home fill="currentColor" />
+          Back to Home
         </Link>
-      )}
-      <div className="ar-result-confetti" aria-hidden="true">
-        {Array.from({ length: 22 }, (_, i) => (
-          <i
-            key={i}
-            style={{
-              left: `${4 + ((i * 43) % 92)}%`,
-              top: `${15 + ((i * 23) % 75)}%`,
-              background: ["#8031ff", "#1f9dff", "#ffc43b", "#00c8da"][i % 4],
-              rotate: `${i * 43}deg`,
-            }}
-          />
-        ))}
-      </div>
+        <div>
+          {finished && (
+            <button
+              className="ar-celebrate-again"
+              onClick={() => setReplay((n) => n + 1)}
+            >
+              <Sparkles />
+              Celebrate again
+            </button>
+          )}
+          {!sample && (
+            <Link to="/admin/game" className="ar-text-link ar-results-manage">
+              Back to Game Management
+            </Link>
+          )}
+        </div>
+      </footer>
+      {finished && <Celebration replay={replay} />}
     </Surface>
   );
 }
