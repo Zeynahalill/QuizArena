@@ -1,480 +1,470 @@
-import { AnimatePresence, motion } from 'motion/react'
-import { ArrowRight, Check, CloudRain, Timer, Trophy, X } from 'lucide-react'
-import { useEffect, useId, useState } from 'react'
-import type { ReactNode } from 'react'
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { ArrowRight, Check, RotateCcw, Timer, Trophy, X } from "lucide-react";
+import { useEffect, useId, useRef, useState } from "react";
+import type { CSSProperties, ReactNode } from "react";
+import "./QuizPlayPage.css";
 
-/* =====================================================================
- * Section 2 – player quiz screens: Question → Correct / Incorrect result.
- * Self-contained (no extra component files) so it works anywhere under
- * src/features/quiz-play/. Question & feedback media are GIFs: drop files in
- * public/gifs/ and set `gifSrc` / the *_GIF constants; a styled fallback is
- * shown when a GIF is missing.
- * ===================================================================== */
-
-type Question = {
-  id: number
-  text: string
-  highlight?: string // part of the title shown in purple
-  gifSrc?: string // question GIF, e.g. '/gifs/ros.gif'
-  gifLabel?: string // text shown in the fallback frame
-  options: string[]
-  correctIndex: number
-}
-
-const SECONDS_PER_QUESTION = 20
-const POINTS_PER_QUESTION = 100
-const CORRECT_GIF = '/gifs/correct.gif'
-const INCORRECT_GIF = '/gifs/incorrect.gif'
-
-// Demo data – replace with the questions coming from the game server.
+// Frontend demo. Replace QUESTIONS with the game server's question payload.
+export type Question = {
+  id: number | string;
+  text: string;
+  highlight: string;
+  gif: string;
+  options: string[];
+  correctIndex: number;
+};
 const QUESTIONS: Question[] = [
   {
     id: 1,
-    text: 'What is ROS?',
-    highlight: 'ROS',
-    gifSrc: '/gifs/ros.gif',
-    gifLabel: 'ROS',
-    options: ['Robot Operating System', 'Robotic Operating System', 'Real Open Source', 'Robot OS'],
+    text: "What is ROS?",
+    highlight: "ROS",
+    gif: "ros",
+    options: [
+      "Robot Operating System",
+      "Robotic Operating System",
+      "Real Open Source",
+      "Robot OS",
+    ],
     correctIndex: 0,
   },
   {
     id: 2,
-    text: 'Which command starts a ROS launch file?',
-    highlight: 'launch file',
-    gifSrc: '/gifs/launch.gif',
-    gifLabel: 'launch',
-    options: ['rosrun', 'roslaunch', 'rostopic', 'rosnode'],
+    text: "Which command starts a ROS launch file?",
+    highlight: "launch file",
+    gif: "launch",
+    options: ["rosrun", "roslaunch", "rostopic", "rosnode"],
     correctIndex: 1,
   },
   {
     id: 3,
-    text: 'What is Gazebo used for?',
-    highlight: 'Gazebo',
-    gifSrc: '/gifs/gazebo.gif',
-    gifLabel: 'Gazebo',
-    options: ['Robot simulation', 'Video editing', 'Database storage', 'Web hosting'],
+    text: "What is Gazebo used for?",
+    highlight: "Gazebo",
+    gif: "gazebo",
+    options: [
+      "Robot simulation",
+      "Video editing",
+      "Database storage",
+      "Web hosting",
+    ],
     correctIndex: 0,
   },
-]
-
-const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F']
-
-const formatTime = (s: number) =>
-  `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`
-
-/* ------------------------------ shared bits ------------------------------ */
-
-function StarMark({ className = '' }: { className?: string }) {
-  const id = `sm-${useId().replace(/:/g, '')}`
-  return (
-    <svg
-      viewBox="80 60 450 485"
-      className={`overflow-visible drop-shadow-[0_0_8px_rgba(99,102,241,0.8)] ${className}`}
-      aria-hidden="true"
-    >
-      <defs>
-        <linearGradient id={id} x1="0.25" y1="0" x2="0.65" y2="1">
-          <stop offset="0" stopColor="#22e4fd" />
-          <stop offset="0.45" stopColor="#3b9bff" />
-          <stop offset="0.75" stopColor="#6a3df8" />
-          <stop offset="1" stopColor="#7c2df0" />
-        </linearGradient>
-      </defs>
-      <path
-        fill={`url(#${id})`}
-        fillRule="evenodd"
-        d="M305 70Q322 262 520 295Q322 328 298 535Q282 328 88 320Q284 270 305 70Z
-           M300 246Q303 292 350 298Q304 305 300 348Q296 305 252 298Q296 291 300 246Z"
-      />
-    </svg>
-  )
-}
+];
+const SECONDS = 20;
+const POINTS = 100;
+const LETTERS = ["A", "B", "C", "D", "E", "F"];
+const mediaUrl = (name: string, still = false) =>
+  `${import.meta.env.BASE_URL}gifs/section-2/${name}.${still ? "png" : "gif"}`;
 
 function Brand() {
+  const id = useId().replace(/:/g, "");
   return (
-    <div className="flex items-center gap-3">
-      <StarMark className="size-9" />
-      <span className="text-2xl font-extrabold tracking-tight">
-        <span className="text-white">Quiz</span>
-        <span className="text-[#7c4ff0]">Arena</span>
+    <div className="qp-brand">
+      <svg viewBox="0 0 60 64" aria-hidden="true">
+        <defs>
+          <linearGradient id={id} x1="0" y1="0" x2="1" y2="1">
+            <stop stopColor="#18e6ff" />
+            <stop offset=".48" stopColor="#6461ff" />
+            <stop offset="1" stopColor="#ac35ff" />
+          </linearGradient>
+        </defs>
+        <path
+          fill={`url(#${id})`}
+          fillRule="evenodd"
+          d="M31 2 39 23 58 30 38 39 29 62 22 41 2 34 22 24ZM30 25 27 31 22 33 28 35 30 41 33 34 38 32 32 30Z"
+        />
+      </svg>
+      <span>
+        Quiz<span>Arena</span>
       </span>
     </div>
-  )
+  );
 }
 
-function Sparkle({ className = '' }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
-      <path
-        d="M12 0C12.8 7 17 11.2 24 12C17 12.8 12.8 17 12 24C11.2 17 7 12.8 0 12C7 11.2 11.2 7 12 0Z"
-        fill="currentColor"
-      />
-    </svg>
-  )
-}
-
-type Tone = 'blue' | 'violet' | 'pink'
-
-/** Soft wave ribbons in the bottom corners of a panel. */
-function Waves({ tone = 'blue' }: { tone?: Tone }) {
-  const c = {
-    blue: ['#1d4ed8', '#38bdf8'],
-    violet: ['#5b21d6', '#a855f7'],
-    pink: ['#be185d', '#f472b6'],
-  }[tone]
+// Resolution-independent layered ribbons; deliberately scoped to Section 2.
+function Ribbons() {
+  const id = useId().replace(/:/g, "");
   return (
     <svg
-      className="pointer-events-none absolute inset-0 size-full"
-      viewBox="0 0 800 600"
+      className="qp-ribbons"
+      viewBox="0 0 774 858"
       preserveAspectRatio="none"
       aria-hidden="true"
     >
-      <path d="M0 600V500C80 470 180 520 260 600Z" fill={c[0]} fillOpacity="0.35" />
-      <path d="M0 500C80 470 180 520 260 600" fill="none" stroke={c[1]} strokeOpacity="0.5" strokeWidth="2" />
-      <path d="M800 600V470C720 450 620 500 540 600Z" fill={c[0]} fillOpacity="0.35" />
-      <path d="M800 470C720 450 620 500 540 600" fill="none" stroke={c[1]} strokeOpacity="0.5" strokeWidth="2" />
+      <defs>
+        <linearGradient id={`${id}v`} x1="0" y1="1" x2="1" y2="0">
+          <stop stopColor="#7908ff" />
+          <stop offset=".5" stopColor="#4911cb" />
+          <stop offset="1" stopColor="#131153" />
+        </linearGradient>
+        <linearGradient id={`${id}b`} x1="1" y1="1" x2="0" y2="0">
+          <stop stopColor="var(--ribbon-bright, #008bff)" />
+          <stop offset=".48" stopColor="var(--ribbon-mid, #064cce)" />
+          <stop offset="1" stopColor="var(--ribbon-dark, #091541)" />
+        </linearGradient>
+      </defs>
+      <path d="M0 25 27 0H118L0 117Z" fill="#25145c" opacity=".32" />
+      <path
+        d="M460 0H590C560 105 551 146 482 183 527 120 516 91 535 45Z"
+        fill={`url(#${id}b)`}
+        opacity=".16"
+        stroke="#3134bd"
+      />
+      <path
+        d="M774 0V285C714 324 684 368 655 400 740 342 728 338 774 319Z"
+        fill={`url(#${id}b)`}
+        opacity=".35"
+        stroke="#2368e7"
+      />
+      <path
+        d="M0 568C63 535 76 469 91 429 79 523 48 571 0 612Z"
+        fill={`url(#${id}v)`}
+        opacity=".45"
+        stroke="#5350e9"
+      />
+      <path
+        d="M0 728C106 753 79 808 230 858H0Z"
+        fill={`url(#${id}v)`}
+        opacity=".6"
+        stroke="#7438e3"
+      />
+      <path
+        d="M0 781C88 791 83 823 161 858H0Z"
+        fill={`url(#${id}v)`}
+        stroke="#9e5aff"
+      />
+      <path d="M0 806C62 813 58 839 104 858H0Z" fill="#6515e9" opacity=".4" />
+      <path
+        d="M774 666C688 700 671 788 583 811 520 828 480 824 448 858H774Z"
+        fill={`url(#${id}b)`}
+        opacity=".45"
+        stroke="#135cf4"
+      />
+      <path
+        d="M774 717C693 734 688 808 594 858H774Z"
+        fill={`url(#${id}b)`}
+        stroke="var(--ribbon-edge, #31c8ff)"
+      />
+      <path
+        d="M774 754C704 759 680 822 638 858H774Z"
+        fill={`url(#${id}b)`}
+        opacity=".7"
+      />
+      <path
+        d="M774 794C731 784 702 829 676 858H774Z"
+        fill="#061645"
+        opacity=".45"
+      />
     </svg>
-  )
+  );
 }
 
-/** Game panel: rounded frame with a glowing border. */
-function Panel({ children, tone = 'blue' }: { children: ReactNode; tone?: Tone }) {
-  const border = {
-    blue: 'border-indigo-400/40 shadow-[0_0_50px_rgba(79,70,229,0.22)]',
-    violet: 'border-violet-400/40 shadow-[0_0_50px_rgba(124,58,237,0.25)]',
-    pink: 'border-pink-400/35 shadow-[0_0_50px_rgba(236,72,153,0.22)]',
-  }[tone]
-  return (
-    <div
-      className={`relative mx-auto flex w-full max-w-3xl flex-col overflow-hidden rounded-[28px] border bg-[#020a38]/90 ${border}`}
-    >
-      <Waves tone={tone} />
-      <div className="relative z-10 flex flex-1 flex-col">{children}</div>
-    </div>
-  )
-}
-
-/** GIF frame with a graceful fallback when the file is missing. */
-function MediaFrame({
-  src,
-  alt,
-  fallback,
-  className = '',
+function Panel({
+  children,
+  kind = "question",
 }: {
-  src?: string
-  alt: string
-  fallback: ReactNode
-  className?: string
+  children: ReactNode;
+  kind?: string;
 }) {
-  const [failed, setFailed] = useState(false)
+  return (
+    <section className={`qp-panel qp-panel--${kind}`}>
+      <Ribbons />
+      <div className="qp-panel-content">{children}</div>
+    </section>
+  );
+}
+function Media({ name, label }: { name: string; label: string }) {
+  const reduced = useReducedMotion();
+  const [failed, setFailed] = useState(false);
   return (
     <div
-      className={`relative overflow-hidden rounded-2xl border border-blue-400/40 bg-gradient-to-br from-[#06165f] via-[#0a2a9e]/60 to-[#06165f] shadow-[0_0_30px_rgba(59,130,246,0.25)] ${className}`}
+      className={`qp-media qp-media--${name.includes("/") || name.startsWith("data:") ? "custom" : name}`}
     >
-      {src && !failed ? (
-        <img src={src} alt={alt} onError={() => setFailed(true)} className="size-full object-cover" />
+      {failed ? (
+        <span className="qp-media-fallback">{label}</span>
       ) : (
-        <div className="grid size-full place-items-center">{fallback}</div>
+        <img
+          src={
+            name.includes("/") || name.startsWith("data:")
+              ? name
+              : mediaUrl(name, !!reduced)
+          }
+          alt={label}
+          onError={() => setFailed(true)}
+        />
       )}
     </div>
-  )
+  );
 }
-
-/* ---------------------------- question screen ---------------------------- */
-
-function QuestionScreen({
+function Decorations() {
+  return (
+    <div className="qp-decoration" aria-hidden="true">
+      <span className="qp-question-mark qp-question-mark--left">?</span>
+      <span className="qp-question-mark qp-question-mark--right">?</span>
+      {[0, 1, 2, 3, 4].map((i) => (
+        <i key={i} className={`qp-spark qp-spark--${i}`}>
+          ✦
+        </i>
+      ))}
+    </div>
+  );
+}
+export function QuestionScreen({
   question,
   index,
-  total,
-  secondsLeft,
+  seconds,
   selected,
   onSelect,
+  total = QUESTIONS.length,
+  readOnly = false,
 }: {
-  question: Question
-  index: number
-  total: number
-  secondsLeft: number
-  selected: number | null
-  onSelect: (i: number) => void
+  question: Question;
+  index: number;
+  seconds: number;
+  selected: number | null;
+  onSelect: (i: number) => void;
+  total?: number;
+  readOnly?: boolean;
 }) {
-  const { text, highlight } = question
-  const parts = highlight && text.includes(highlight) ? text.split(highlight) : [text]
-
+  const highlighted =
+    question.highlight && question.text.includes(question.highlight);
+  const [before, after] = highlighted
+    ? question.text.split(question.highlight)
+    : [question.text, ""];
   return (
     <Panel>
-      <header className="flex items-center justify-between border-b border-white/5 px-6 py-4 sm:px-8">
+      <header className="qp-header">
         <Brand />
-        <div className="flex items-center gap-2 rounded-2xl border border-indigo-400/30 bg-[#050d4a]/60 px-4 py-2 text-lg font-semibold">
-          <Timer className="size-5" />
-          <span className={secondsLeft <= 5 ? 'text-rose-300' : ''}>{formatTime(secondsLeft)}</span>
+        <div
+          className={`qp-timer ${seconds <= 5 ? "qp-timer--urgent" : ""}`}
+          role="timer"
+          aria-label={`${seconds} seconds remaining`}
+        >
+          <Timer />
+          <span>00:{String(seconds).padStart(2, "0")}</span>
         </div>
       </header>
-
-      <div className="relative px-6 pb-8 pt-8 sm:px-10">
-        {/* decorative marks */}
-        <span className="pointer-events-none absolute left-5 top-14 -rotate-12 text-7xl font-extrabold text-indigo-500/40">?</span>
-        <span className="pointer-events-none absolute right-5 top-20 rotate-12 text-6xl font-extrabold text-indigo-500/40">?</span>
-        <Sparkle className="pointer-events-none absolute left-[26%] top-16 size-3 text-indigo-400/70" />
-        <Sparkle className="pointer-events-none absolute left-6 top-56 size-4 text-indigo-400/70" />
-        <Sparkle className="pointer-events-none absolute right-6 top-60 size-4 text-indigo-400/70" />
-
-        <div className="flex justify-center">
-          <span className="rounded-full border border-violet-400/40 bg-gradient-to-r from-[#3b1a8f] to-[#4a2bc4] px-6 py-2 text-base font-medium">
-            Question {index + 1} / {total}
-          </span>
+      <div className="qp-question-body">
+        <Decorations />
+        <div className="qp-progress">
+          Question {index + 1} / {total}
         </div>
-
-        <h2 className="mt-6 text-center text-4xl font-extrabold leading-tight sm:text-5xl">
-          {parts.length === 2 ? (
-            <>
-              {parts[0]}
-              <span className="text-[#7c4ff0]">{highlight}</span>
-              {parts[1]}
-            </>
-          ) : (
-            text
-          )}
-        </h2>
-
-        <MediaFrame
-          src={question.gifSrc}
-          alt={question.text}
-          className="mt-8 h-44 sm:h-52"
-          fallback={
-            <div className="flex items-center gap-5 text-5xl font-medium text-sky-200 drop-shadow-[0_0_18px_rgba(125,211,252,0.8)] sm:text-7xl">
-              <span className="grid grid-cols-3 gap-2" aria-hidden="true">
-                {Array.from({ length: 9 }).map((_, i) => (
-                  <span key={i} className="size-3 rounded-full bg-sky-200 sm:size-4" />
-                ))}
-              </span>
-              {question.gifLabel ?? ''}
-            </div>
-          }
-        />
-
-        <div className="mt-6 flex flex-col gap-4">
-          {question.options.map((opt, i) => {
-            const active = selected === i
-            return (
-              <button
-                key={opt}
-                type="button"
-                onClick={() => onSelect(i)}
-                className={`flex items-center gap-6 rounded-2xl border px-5 py-4 text-left text-lg transition ${
-                  active
-                    ? 'border-cyan-300 bg-blue-600/30 shadow-[0_0_28px_rgba(56,189,248,0.45)]'
-                    : 'border-indigo-400/25 bg-[#0a1245]/70 hover:border-cyan-300/70 hover:bg-blue-600/20'
-                }`}
-              >
-                <span
-                  className={`grid size-12 shrink-0 place-items-center rounded-full text-xl font-semibold ring-1 ${
-                    active ? 'bg-cyan-400/20 ring-cyan-300' : 'bg-indigo-500/25 ring-indigo-300/25'
-                  }`}
-                >
-                  {LETTERS[i]}
-                </span>
-                {opt}
-              </button>
-            )
-          })}
+        <h1 className={question.text.length > 25 ? "qp-long-title" : ""}>
+          {before}
+          {highlighted && <span>{question.highlight}</span>}
+          {after}
+        </h1>
+        {question.gif && (
+          <Media key={question.id} name={question.gif} label={question.text} />
+        )}
+        <div className="qp-options" aria-label="Answer options">
+          {question.options.map((answer, i) => (
+            <button
+              type="button"
+              key={`${question.id}-${i}`}
+              className={`qp-option ${selected === i ? "is-selected" : ""}`}
+              disabled={readOnly || selected !== null}
+              aria-pressed={selected === i}
+              onClick={() => onSelect(i)}
+            >
+              <span className="qp-letter">{LETTERS[i]}</span>
+              <span>{answer}</span>
+            </button>
+          ))}
         </div>
       </div>
     </Panel>
-  )
+  );
 }
-
-/* ----------------------------- result screen ----------------------------- */
-
-const CONFETTI = [
-  { x: '6%', y: '22%', r: 30, c: '#facc15', w: 18, h: 6 },
-  { x: '12%', y: '8%', r: -40, c: '#34d399', w: 14, h: 5 },
-  { x: '4%', y: '52%', r: 60, c: '#f472b6', w: 16, h: 6 },
-  { x: '18%', y: '88%', r: -20, c: '#facc15', w: 16, h: 6 },
-  { x: '80%', y: '14%', r: 50, c: '#34d399', w: 12, h: 5 },
-  { x: '92%', y: '40%', r: -30, c: '#fb923c', w: 14, h: 5 },
-  { x: '86%', y: '84%', r: 20, c: '#facc15', w: 14, h: 5 },
-  { x: '50%', y: '-2%', r: 15, c: '#38bdf8', w: 10, h: 4 },
-]
-
-function ResultScreen({
-  correct,
-  answerLabel,
-  points,
-  onContinue,
-}: {
-  correct: boolean
-  answerLabel: string
-  points: number
-  onContinue: () => void
-}) {
-  const ok = correct
+function StatusOrb({ correct }: { correct: boolean }) {
   return (
-    <Panel tone={ok ? 'blue' : 'pink'}>
-      <header className="flex items-center justify-between px-6 py-4 sm:px-8">
-        <Brand />
-        <div
-          className={`flex items-center gap-2 rounded-xl border px-4 py-2 text-base font-semibold ${
-            ok
-              ? 'border-amber-400/40 bg-amber-500/15 text-amber-200'
-              : 'border-indigo-400/30 bg-[#0a1245]/60 text-indigo-100'
-          }`}
+    <div
+      className={`qp-orbit ${correct ? "qp-orbit--correct" : "qp-orbit--incorrect"}`}
+      aria-hidden="true"
+    >
+      <div className="qp-orbit-ring" />
+      <div className="qp-orbit-rays" />
+      {Array.from({ length: 16 }, (_, i) => (
+        <i
+          key={i}
+          className="qp-confetti"
+          style={
+            {
+              "--i": i,
+              "--turn": `${i * 22.5}deg`,
+              "--color": correct
+                ? ["#00d7ad", "#ffbc36", "#9367ff", "#f953b5"][i % 4]
+                : ["#ed3c82", "#9c245e"][i % 2],
+            } as CSSProperties
+          }
         >
-          <Trophy className={`size-5 ${ok ? 'text-amber-400' : 'text-indigo-200'}`} />
-          {ok ? `+${points} pts` : '0 pts'}
+          {correct ? "" : "×"}
+        </i>
+      ))}
+      <div className="qp-status-orb">
+        {correct ? <Check strokeWidth={4.5} /> : <X strokeWidth={4.5} />}
+      </div>
+    </div>
+  );
+}
+export function ResultScreen({
+  correct,
+  answer,
+  timedOut,
+  onContinue,
+  gif,
+  continueLabel = "Continue",
+}: {
+  correct: boolean;
+  answer: string;
+  timedOut: boolean;
+  onContinue: () => void;
+  gif?: string;
+  continueLabel?: string;
+}) {
+  const heading = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    heading.current?.focus();
+  }, []);
+  return (
+    <Panel kind={correct ? "correct" : "incorrect"}>
+      <header className="qp-header">
+        <Brand />
+        <div className={`qp-points ${correct ? "qp-points--gold" : ""}`}>
+          <Trophy />
+          <span>{correct ? "+100" : "0"} pts</span>
         </div>
       </header>
-
-      <div className="grid items-center gap-8 px-6 pb-10 pt-4 sm:px-10 md:grid-cols-[auto_1fr]">
-        {/* status circle */}
-        <div className="relative mx-auto grid size-52 place-items-center sm:size-60">
-          {CONFETTI.map((p, i) =>
-            ok ? (
-              <span
-                key={i}
-                className="absolute rounded-[2px]"
-                style={{ left: p.x, top: p.y, width: p.w, height: p.h, background: p.c, transform: `rotate(${p.r}deg)` }}
-              />
-            ) : (
-              <X
-                key={i}
-                className="absolute size-4 text-rose-400/80"
-                style={{ left: p.x, top: p.y, transform: `rotate(${p.r}deg)` }}
-              />
-            ),
-          )}
-          <span className={`absolute inset-0 rounded-full border ${ok ? 'border-emerald-400/25' : 'border-rose-400/25'}`} />
-          <motion.div
-            initial={{ scale: 0.6, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ type: 'spring', stiffness: 220, damping: 16 }}
-            className={`grid size-40 place-items-center rounded-full border-[10px] sm:size-44 ${
-              ok
-                ? 'border-emerald-300 bg-[radial-gradient(circle,#10b981,#065f46)] shadow-[0_0_70px_rgba(16,185,129,0.6)]'
-                : 'border-rose-300 bg-[radial-gradient(circle,#fb4565,#9f1239)] shadow-[0_0_70px_rgba(244,63,94,0.6)]'
-            }`}
-          >
-            {ok ? (
-              <Check className="size-20 text-white" strokeWidth={4} />
-            ) : (
-              <X className="size-20 text-white" strokeWidth={4} />
-            )}
-          </motion.div>
-        </div>
-
-        {/* details */}
-        <div className="flex flex-col items-center gap-3 md:items-start">
-          <div
-            className={`flex items-center gap-3 rounded-2xl border px-6 py-3 text-3xl font-bold ${
-              ok
-                ? 'border-emerald-400/40 bg-emerald-900/40'
-                : 'border-rose-400/40 bg-rose-900/50'
-            }`}
-          >
-            <span className={`grid size-8 place-items-center rounded-full ${ok ? 'bg-emerald-500' : 'bg-rose-500'}`}>
-              {ok ? <Check className="size-5" strokeWidth={4} /> : <X className="size-5" strokeWidth={4} />}
-            </span>
-            {ok ? 'Correct!' : 'Incorrect!'}
-          </div>
-
-          <p className="text-sm text-indigo-100/80">The correct answer is:</p>
-          <div className="rounded-full border border-indigo-400/40 bg-[#0a1245]/80 px-6 py-2 text-lg font-medium">
-            {answerLabel}
-          </div>
-
-          <MediaFrame
-            src={ok ? CORRECT_GIF : INCORRECT_GIF}
-            alt={ok ? 'Celebration' : 'Better luck next time'}
-            className="mt-2 h-36 w-full max-w-sm"
-            fallback={
-              ok ? (
-                <Trophy className="size-20 text-amber-400 drop-shadow-[0_0_24px_rgba(251,191,36,0.9)]" />
-              ) : (
-                <CloudRain className="size-20 text-indigo-100 drop-shadow-[0_0_20px_rgba(165,180,252,0.8)]" />
-              )
-            }
+      <div className="qp-result-body">
+        <StatusOrb correct={correct} />
+        <div className="qp-result-detail">
+          <h1 ref={heading} tabIndex={-1} className="qp-verdict">
+            <span>{correct ? <Check /> : <X />}</span>
+            {correct ? "Correct!" : timedOut ? "Time’s up!" : "Incorrect!"}
+          </h1>
+          <p>The correct answer is:</p>
+          <div className="qp-answer">{answer}</div>
+          <Media
+            name={gif || (correct ? "correct" : "incorrect")}
+            label={correct ? "Celebration trophy" : "Rainy cloud"}
           />
-
-          <button
-            type="button"
-            onClick={onContinue}
-            className="mt-2 flex items-center gap-2 rounded-full bg-gradient-to-r from-[#7a35ff] to-[#4f46e5] px-8 py-3 text-lg font-semibold shadow-[0_8px_30px_rgba(91,63,248,0.45)] transition hover:brightness-110"
-          >
-            Continue <ArrowRight className="size-5" />
+          <button type="button" className="qp-continue" onClick={onContinue}>
+            {continueLabel} <ArrowRight />
           </button>
         </div>
       </div>
     </Panel>
-  )
+  );
 }
 
-/* --------------------------------- page --------------------------------- */
-
 export default function QuizPlayPage() {
-  const [qIndex, setQIndex] = useState(0)
-  const [phase, setPhase] = useState<'question' | 'result'>('question')
-  const [selected, setSelected] = useState<number | null>(null)
-  const [secondsLeft, setSecondsLeft] = useState(SECONDS_PER_QUESTION)
+  const [qIndex, setQIndex] = useState(0);
+  const [phase, setPhase] = useState<"question" | "result" | "finished">(
+    "question",
+  );
+  const [selected, setSelected] = useState<number | null>(null);
+  const [seconds, setSeconds] = useState(SECONDS);
+  const [score, setScore] = useState(0);
+  const locked = useRef(false);
+  const reduced = useReducedMotion();
+  const question = QUESTIONS[qIndex];
 
-  const question = QUESTIONS[qIndex]
-  const isCorrect = selected === question.correctIndex
-
-  // countdown – when it reaches 0 the question is closed without an answer
   useEffect(() => {
-    if (phase !== 'question') return
-    const t = setTimeout(() => {
-      if (secondsLeft <= 1) {
-        setSecondsLeft(0)
-        setPhase('result')
-      } else {
-        setSecondsLeft((s) => s - 1)
-      }
-    }, 1000)
-    return () => clearTimeout(t)
-  }, [phase, secondsLeft])
+    if (phase !== "question" || selected !== null) return;
+    const timer = window.setTimeout(() => {
+      if (locked.current) return;
+      if (seconds <= 1) {
+        locked.current = true;
+        setSeconds(0);
+        setPhase("result");
+      } else setSeconds((s) => s - 1);
+    }, 1000);
+    return () => window.clearTimeout(timer);
+  }, [phase, seconds, selected]);
+  useEffect(() => {
+    if (selected === null || phase !== "question") return;
+    const timer = window.setTimeout(() => setPhase("result"), 420);
+    return () => window.clearTimeout(timer);
+  }, [selected, phase]);
 
-  const handleSelect = (i: number) => {
-    if (phase !== 'question') return
-    setSelected(i)
-    setTimeout(() => setPhase('result'), 350)
-  }
-
-  const handleContinue = () => {
-    setQIndex((i) => (i + 1) % QUESTIONS.length)
-    setSelected(null)
-    setSecondsLeft(SECONDS_PER_QUESTION)
-    setPhase('question')
-  }
+  const select = (i: number) => {
+    if (locked.current || phase !== "question") return;
+    locked.current = true;
+    setSelected(i);
+    if (i === question.correctIndex) setScore((s) => s + POINTS);
+  };
+  const next = () => {
+    if (qIndex === QUESTIONS.length - 1) {
+      setPhase("finished");
+      return;
+    }
+    setQIndex((i) => i + 1);
+    setSelected(null);
+    setSeconds(SECONDS);
+    locked.current = false;
+    setPhase("question");
+  };
+  const restart = () => {
+    setQIndex(0);
+    setScore(0);
+    setSelected(null);
+    setSeconds(SECONDS);
+    locked.current = false;
+    setPhase("question");
+  };
 
   return (
-    <main className="flex min-h-svh flex-col justify-center bg-[radial-gradient(ellipse_at_top,#06124f_0%,#000828_60%)] px-3 py-4 font-sans text-white sm:px-6 sm:py-8">
+    <main className="quiz-play">
+      <div className="qp-ambient" aria-hidden="true" />
       <AnimatePresence mode="wait">
         <motion.div
-          className="w-full"
+          className="qp-stage"
           key={`${qIndex}-${phase}`}
-          initial={{ opacity: 0, y: 12 }}
+          initial={reduced ? false : { opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -8 }}
-          transition={{ duration: 0.25 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: reduced ? 0 : 0.18 }}
         >
-          {phase === 'question' ? (
+          {phase === "question" ? (
             <QuestionScreen
               question={question}
               index={qIndex}
-              total={QUESTIONS.length}
-              secondsLeft={secondsLeft}
+              seconds={seconds}
               selected={selected}
-              onSelect={handleSelect}
+              onSelect={select}
+            />
+          ) : phase === "result" ? (
+            <ResultScreen
+              correct={selected === question.correctIndex}
+              timedOut={selected === null}
+              answer={`${LETTERS[question.correctIndex]}. ${question.options[question.correctIndex]}`}
+              onContinue={next}
             />
           ) : (
-            <ResultScreen
-              correct={isCorrect}
-              answerLabel={`${LETTERS[question.correctIndex]}. ${question.options[question.correctIndex]}`}
-              points={POINTS_PER_QUESTION}
-              onContinue={handleContinue}
-            />
+            <Panel kind="finished">
+              <header className="qp-header">
+                <Brand />
+                <div className="qp-points qp-points--gold">
+                  <Trophy /> Final Results
+                </div>
+              </header>
+              <div className="qp-finished">
+                <Trophy className="qp-final-trophy" />
+                <h1>Competition Finished!</h1>
+                <p>
+                  You answered {score / POINTS} of {QUESTIONS.length} questions
+                  correctly.
+                </p>
+                <strong>
+                  {score} <span>pts</span>
+                </strong>
+                <button className="qp-continue" onClick={restart}>
+                  <RotateCcw /> Play Again
+                </button>
+              </div>
+            </Panel>
           )}
         </motion.div>
       </AnimatePresence>
     </main>
-  )
+  );
 }

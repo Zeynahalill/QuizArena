@@ -1,27 +1,40 @@
-import { Link, Route, Routes } from 'react-router'
-import AdminLoginPage from './features/admin-auth/AdminLoginPage'
-import QuizPlayPage from './features/quiz-play/QuizPlayPage'
-
-const Placeholder = ({ title }: { title: string }) => (
-  <div className="grid min-h-svh place-items-center gap-4 text-center text-2xl">
-    <div>
-      {title} (coming soon)
-      <div className="mt-4 text-base">
-        <Link to="/admin/login" className="text-arena-cyan underline">
-          Admin login
-        </Link>
-      </div>
-    </div>
-  </div>
-)
-
+import { Link, Route, Routes } from "react-router";
+import AdminLoginPage from "./features/admin-auth/AdminLoginPage";
+import QuizPlayPage from "./features/quiz-play/QuizPlayPage";
+import HomePage, { Dashboard } from "./features/arena/HomePage";
+import GameManagement from "./features/arena/GameManagement";
+import QuizEditor from "./features/arena/QuizEditor";
+import { EnterName, JoinGame, Lobby } from "./features/arena/JoinPages";
+import { LivePlayer, MainScreen, Results } from "./features/arena/LiveScreens";
+import { Logo, Surface } from "./features/arena/ArenaShared";
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Placeholder title="Home" />} />
+      <Route path="/" element={<HomePage />} />
       <Route path="/admin/login" element={<AdminLoginPage />} />
+      <Route path="/admin" element={<Dashboard />} />
+      <Route path="/admin/quizzes" element={<QuizEditor />} />
+      <Route path="/create" element={<QuizEditor />} />
+      <Route path="/admin/game" element={<GameManagement />} />
+      <Route path="/join" element={<JoinGame />} />
+      <Route path="/join/name" element={<EnterName />} />
+      <Route path="/lobby" element={<Lobby />} />
       <Route path="/play" element={<QuizPlayPage />} />
-      <Route path="/admin" element={<Placeholder title="Admin dashboard" />} />
+      <Route path="/play/live" element={<LivePlayer />} />
+      <Route path="/main" element={<MainScreen />} />
+      <Route path="/results" element={<Results />} />
+      <Route
+        path="*"
+        element={
+          <Surface className="ar-not-found">
+            <Logo />
+            <h1>Page not found</h1>
+            <Link className="ar-button" to="/">
+              Back to Home
+            </Link>
+          </Surface>
+        }
+      />
     </Routes>
-  )
+  );
 }
